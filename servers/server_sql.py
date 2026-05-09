@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
-import psycopg2, json
+import psycopg2
+import json
 import os
 
 # Inicializa o servidor MCP com nome lógico "SQL"

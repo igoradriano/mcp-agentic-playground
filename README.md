@@ -77,10 +77,55 @@ Then update `OPENAI_API_KEY` in `.env`.
 
 ## Run Demos
 
-### A. Run demo MCP server (SSE)
+### A. Run demo MCP server
+
+This project supports two server startup modes.
+
+#### Option 1: SSE transport (recommended for current native client example)
+
+Use this mode when running `cliente_nativo/client_example.py` as currently written.
+It connects to `http://localhost:8000/sse` by default.
+
+Terminal 1:
 
 ```bash
-mcp run servers/server_test.py
+mcp run -t sse servers/server_test.py
+```
+
+Terminal 2:
+
+```bash
+python cliente_nativo/client_example.py
+```
+
+You can override the URL with an environment variable:
+
+Windows (PowerShell):
+
+```powershell
+$env:MCP_SSE_URL = "http://localhost:8000/sse"
+python cliente_nativo/client_example.py
+```
+
+macOS/Linux:
+
+```bash
+export MCP_SSE_URL="http://localhost:8000/sse"
+python cliente_nativo/client_example.py
+```
+
+#### Option 2: STDIO transport (single-process flow)
+
+Use this mode when the client starts the server process itself.
+
+In `cliente_nativo/client_example.py`:
+- enable: `await client.initialize_with_stdio("mcp", ["run", "servers/server_test.py"])`
+- disable/comment: `await client.initialize_with_sse(...)`
+
+Then run only:
+
+```bash
+python cliente_nativo/client_example.py
 ```
 
 ### B. Native MCP client example
@@ -100,6 +145,47 @@ python cliente_openai/chat_agent_example.py
 ```bash
 streamlit run streamlit/chat.py
 ```
+
+## Troubleshooting
+
+### Error: `typer is required`
+
+Install MCP CLI extras:
+
+```bash
+pip install "mcp[cli]"
+```
+
+### Error: `ModuleNotFoundError: No module named 'mcp'`
+
+Ensure the virtual environment is active and reinstall dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install "mcp[cli]"
+```
+
+### Error: `ConnectError: All connection attempts failed`
+
+Most common cause: the client is using SSE but the server is not running with SSE transport.
+
+Start the server with:
+
+```bash
+mcp run -t sse servers/server_test.py
+```
+
+Keep it running in a separate terminal before starting the client.
+
+### Error: FastMCP type mismatch (`fastmcp` vs `mcp.server.fastmcp`)
+
+Server files must import FastMCP from MCP package:
+
+```python
+from mcp.server.fastmcp import FastMCP
+```
+
+Do not mix with standalone `fastmcp` import.
 
 ## UI Preview
 
