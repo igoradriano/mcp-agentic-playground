@@ -41,7 +41,7 @@ flowchart LR
 
 ```bash
 git clone <your-repo-url>
-cd MCP
+cd mcp-agentic-playground
 ```
 
 ### 2. Create and activate virtual environment
@@ -101,6 +101,10 @@ python cliente_openai/chat_agent_example.py
 streamlit run streamlit/chat.py
 ```
 
+## UI Preview
+
+![Streamlit UI preview](arquivos/novadrive.png)
+
 ## Configuration Notes
 
 - `server_sql.py` supports environment overrides via:
@@ -125,4 +129,4 @@ streamlit run streamlit/chat.py
 
 ## License
 
-MIT (add `LICENSE` file if you want open-source distribution).
+MIT. See [LICENSE](LICENSE).
